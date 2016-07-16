@@ -14,7 +14,7 @@ app.config.from_object(__name__)
 
 @app.route('/')
 def index():
-  return 'Winter is Coming.'
+    return 'Winter is Coming.'
 
 # can be POST /nlp - which is audio input
 # or GET /nlp?text=i+have+a+dog - which is text input
