@@ -1,20 +1,24 @@
 # all the imports
 import os
 from flask import Flask, request, session, jsonify, abort
+from watson_developer_cloud import SpeechToTextV1
 from werkzeug.utils import secure_filename
 
 UPLOAD_FOLDER = '/tmp'
 ALLOWED_EXTENSIONS = set(['wav'])
 
-# create our little application :)
-app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config.from_object(__name__)
+app = Flask(__name__, instance_relative_config=True)
+app.config.from_pyfile('main.cfg')
 
+speech_to_text = SpeechToTextV1(
+    username=app.config['WATSON_USERNAME'],
+    password=app.config['WATSON_PASSWORD'],
+    x_watson_learning_opt_out=False
+)
 
 @app.route('/')
 def index():
-    return 'Winter is Coming.'
+    return jsonify('Winter is Coming.')
 
 # can be POST /nlp - which is audio input
 # or GET /nlp?text=i+have+a+dog - which is text input
