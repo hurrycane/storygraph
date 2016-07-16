@@ -1,4 +1,6 @@
 import abc
+import json
+from watson_developer_cloud import SpeechToTextV1
 
 class StoryToText():
     __metaclass__ = abc.ABCMeta
@@ -22,8 +24,6 @@ class WatsonStoryToText(StoryToText):
         )
 
     def recognize(self, audio_file_path):
-        print audio_file_path
-        with open(join(dirname(__file__), audio_file_path), 'rb') as audio_file:
-            return json.dumps(speech_to_text.recognize(
-                audio_file,
-                content_type='audio/wav'), indent=2))
+        with open(audio_file_path, 'rb') as audio_file:
+            return json.dumps(self.speech_to_text.recognize(audio_file,
+                content_type='audio/wav'), indent=2)
