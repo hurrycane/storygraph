@@ -48,7 +48,7 @@ def nlp():
 
 @app.route('/graph', methods=['GET'])
 def graph():
-    return jsonify(nodes=set(['test_node']))
+    return jsonify(nodes=['test_node'])
 
 def allowed_file(filename):
     return '.' in filename and \
