@@ -1,12 +1,20 @@
 function parse(input) {
-  const lines = input.replace(/\s+/g, ' ').split('\n');
+  const lines = input.replace(/ +/g, ' ').split('\n');
   const output = {};
 
-  lines.forEach(line => {
-    const [
-      id, form, lemma, cpostag, postag,
-      feats, head, deprel, phead, pdeprel
-    ] = line.split(' ');
+  lines.filter(l => l).forEach(line => {
+    const splits = line.split(' ');
+
+    const id = splits[0];
+    const form = splits[1];
+    const lemma = splits[2];
+    const cpostag = splits[3];
+    const postag = splits[4];
+    const feats = splits[5];
+    const head = splits[6];
+    const deprel = splits[7];
+    const phead = splits[8];
+    const pdeprel = splits[9];
 
     output[id] = {
       id, form, lemma, cpostag, postag,
