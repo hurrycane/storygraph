@@ -10,6 +10,10 @@ const testData = require('./test');
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 
+app.get('/__ping', (req, res, next) => {
+  res.status(200).send('pong');
+});
+
 app.post('/syntaxnet', (req, res, next) => {
   const input = req.body.input;
   cmd.run(input).then(result => res.status(200).json(parser.parse(result)));
