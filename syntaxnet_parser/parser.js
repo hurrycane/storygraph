@@ -1,6 +1,6 @@
-function parse(input) {
-  const lines = input.replace(/ +/g, ' ').split('\n');
-  const output = {};
+function parse(input)  {
+  const lines = input.replace(/[\t +]/g, ' ').split('\n');
+  const output = [] ;
 
   lines.filter(l => l).forEach(line => {
     const splits = line.split(' ');
@@ -16,10 +16,10 @@ function parse(input) {
     const phead = splits[8];
     const pdeprel = splits[9];
 
-    output[id] = {
+    output.push({
       id, form, lemma, cpostag, postag,
       feats, head, deprel, phead, pdeprel
-    };
+    });
   });
 
   return output;
