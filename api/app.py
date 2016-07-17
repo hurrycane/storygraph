@@ -28,7 +28,6 @@ def nlp():
         text_out = text_in
     else:
         if 'audio_wav_file' not in request.files:
-            raise "a"
             abort(400)
 
         audio_in = request.files['audio_wav_file']

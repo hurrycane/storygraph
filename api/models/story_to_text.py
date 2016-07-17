@@ -25,5 +25,5 @@ class WatsonStoryToText(StoryToText):
 
     def recognize(self, audio_file_path):
         with open(audio_file_path, 'rb') as audio_file:
-            return json.dumps(self.speech_to_text.recognize(audio_file,
-                content_type='audio/wav'), indent=2)
+            return self.speech_to_text.recognize(audio_file,
+                continuous=True, content_type='audio/wav')
