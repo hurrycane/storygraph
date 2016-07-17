@@ -1,3 +1,6 @@
+from __future__ import print_function # In python 2.7
+import sys
+
 from flask import Flask, request, session, jsonify, abort
 import json
 import os
@@ -6,7 +9,7 @@ from werkzeug.utils import secure_filename
 import httplib, urllib, base64
 
 from models import WatsonStoryToText
-from models import syntax_net_to_graph
+from models.syntax_net_to_graph import Graph
 
 ALLOWED_EXTENSIONS = set(['wav'])
 
@@ -17,16 +20,15 @@ story_to_text = WatsonStoryToText(
     username=app.config['WATSON_USERNAME'],
     password=app.config['WATSON_PASSWORD'])
 
-def _syntax_net(txts):
+def _syntax_net(objs):
     all_reqs = []
-    for txt in txts:
+    for obj in objs:
+        print('HERE: ', obj, file=sys.stderr)
         all_reqs.append(
             requests.post(
-                'http://localhost:3033/syntax', 
-                headers={'content-type': 'application/json',}, 
-                data=json.dumps({
-                    'input': txt
-                })
+                'http://localhost:3033/syntaxnet', 
+                headers={'content-type': 'application/json'}, 
+                data=json.dumps(obj),
             )
         )
 
@@ -66,12 +68,11 @@ def graph():
 
 @app.route('/syntaxnet', methods=['POST'])
 def syntaxnet():
-    text_in = request.args.get('input')
-    all_nodes = _syntax_net([text_in])
+    obj = json.loads(request.data)
+    all_nodes = _syntax_net([obj])
     assert len(all_nodes) == 1, '1 ONE'
-    summary = syntax_net_to_graph(nodes[0])
-
-    return jsonify(summary=summary, nodes=nodes[0])
+    summary = Graph(all_nodes[0]).find_strings()
+    return jsonify(summary=list(summary), nodes=all_nodes[0])
 
 # template = "https://www.google.com/search?hl=en&authuser=0&site=imghp&tbm=isch&source=hp&q={0}"
 # template = "https://www.google.com/complete/search?client=img&hl=en&gs_rn=64&gs_ri=img&ds=i&pq={0}&cp=3&gs_id=719&q={0}&xhr=t"
