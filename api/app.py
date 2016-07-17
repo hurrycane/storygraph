@@ -71,8 +71,9 @@ def syntaxnet():
     obj = json.loads(request.data)
     all_nodes = _syntax_net([obj])
     assert len(all_nodes) == 1, '1 ONE'
-    summary = Graph(all_nodes[0]).find_strings()
-    return jsonify(summary=list(summary), nodes=all_nodes[0])
+    summary_raw = Graph(all_nodes[0]).find_strings()
+    summary = list(summary_raw) if len(summary_raw) else []
+    return jsonify(summary=(summary), nodes=all_nodes[0])
 
 # template = "https://www.google.com/search?hl=en&authuser=0&site=imghp&tbm=isch&source=hp&q={0}"
 # template = "https://www.google.com/complete/search?client=img&hl=en&gs_rn=64&gs_ri=img&ds=i&pq={0}&cp=3&gs_id=719&q={0}&xhr=t"
