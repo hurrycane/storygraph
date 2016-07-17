@@ -211,7 +211,7 @@ class Graph(object):
         remove_ids = [
             node_id
             for node_id, node in self.nodes.items()
-            if condition(node)
+            if condition(node) and node_id != self.root.id
         ]
 
         for node_id in remove_ids:
