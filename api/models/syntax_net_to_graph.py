@@ -295,6 +295,7 @@ class Graph(object):
         draw_graph(edges)
 
 
-print TEST_PHRASE
+"""
 graph = Graph(raw_graph)
 print graph.find_strings()
+"""
