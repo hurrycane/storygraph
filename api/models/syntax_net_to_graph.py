@@ -230,6 +230,9 @@ class Graph(object):
         return neighbours
 
     def find_strings(self):
+        if self.root is None:
+            return set([])
+
         if self.root.pos == "NOUN":
             candidates = []
             neighbours = self._neighbours(self.root.id)
