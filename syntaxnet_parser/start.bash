@@ -1,3 +1,2 @@
 #!/bin/bash
-
-sudo REALZ=true node ./index.js
+exec sudo REALZ=true node ./index.js
