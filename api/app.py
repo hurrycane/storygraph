@@ -26,8 +26,8 @@ def _syntax_net(objs):
         print('HERE: ', obj, file=sys.stderr)
         all_reqs.append(
             requests.post(
-                'http://localhost:3033/syntaxnet', 
-                headers={'content-type': 'application/json'}, 
+                'http://localhost:3033/syntaxnet',
+                headers={'content-type': 'application/json'},
                 data=json.dumps(obj),
             )
         )
@@ -91,7 +91,7 @@ def bing_image_search(query):
 
   params = urllib.urlencode({
       # Request parameters
-      'q': query + ' cartoon',
+      'q': query + ' simple cartoon',
       'count': '1',
       'offset': '0',
       'mkt': 'en-us',
@@ -107,7 +107,7 @@ def bing_image_search(query):
     return json.loads(data)["value"][0]["contentUrl"]
   except:
     conn.close()
-    raise 
+    raise
 
 def allowed_file(filename):
     return '.' in filename and \
