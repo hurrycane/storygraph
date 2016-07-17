@@ -72,7 +72,7 @@ def syntaxnet():
     all_nodes = _syntax_net([obj])
     assert len(all_nodes) == 1, '1 ONE'
     summary_raw = Graph(all_nodes[0]).find_strings()
-    summary = list(summary_raw) if len(summary_raw) else []
+    summary = list(summary_raw) if (summary_raw and len(summary_raw)) else []
     return jsonify(summary=(summary), nodes=all_nodes[0])
 
 # template = "https://www.google.com/search?hl=en&authuser=0&site=imghp&tbm=isch&source=hp&q={0}"

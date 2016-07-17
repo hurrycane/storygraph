@@ -192,8 +192,11 @@ class Graph(object):
 
         for node_id in to_compact:
             node_to_compact = self.nodes[node_id]
-            head_node = self.nodes[node_to_compact.head_id]
 
+            if node_to_compact.head_id not in self.nodes:
+                continue
+
+            head_node = self.nodes[node_to_compact.head_id]
             head_node.inbound.remove(node_to_compact.id)
 
             for inbound_of_compact in node_to_compact.inbound:
