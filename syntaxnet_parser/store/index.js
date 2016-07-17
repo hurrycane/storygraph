@@ -48,7 +48,7 @@ function createNode(node) {
       if (err) return reject(err);
       const dbNode = res.data[0];
       return resolve(
-        Object.assign({}, dbNode, node);
+        Object.assign({}, dbNode, node)
       );
     });
   });
