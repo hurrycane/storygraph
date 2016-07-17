@@ -1,6 +1,9 @@
-import os
 from flask import Flask, request, session, jsonify, abort
+import json
+import os
+import requests
 from werkzeug.utils import secure_filename
+import httplib, urllib, base64
 
 from models import WatsonStoryToText
 
@@ -44,6 +47,40 @@ def nlp():
 @app.route('/graph', methods=['GET'])
 def graph():
     return jsonify(nodes=['test_node'])
+
+# template = "https://www.google.com/search?hl=en&authuser=0&site=imghp&tbm=isch&source=hp&q={0}"
+# template = "https://www.google.com/complete/search?client=img&hl=en&gs_rn=64&gs_ri=img&ds=i&pq={0}&cp=3&gs_id=719&q={0}&xhr=t"
+@app.route('/image', methods=['GET'])
+def image():
+  words = request.args['q']
+  # Returns the image URL, not the image itself.
+  return bing_image_search(words)
+
+def bing_image_search(query):
+  headers = {
+      # Request headers
+      'Ocp-Apim-Subscription-Key': '2bc8ba92b0544d87aa0d36a0c066e62f',
+  }
+
+  params = urllib.urlencode({
+      # Request parameters
+      'q': query,
+      'count': '1',
+      'offset': '0',
+      'mkt': 'en-us',
+      'safeSearch': 'Moderate',
+  })
+
+  try:
+    conn = httplib.HTTPSConnection('api.cognitive.microsoft.com')
+    conn.request("GET", "/bing/v5.0/images/search?%s" % params, "{body}", headers)
+    response = conn.getresponse()
+    data = response.read()
+    conn.close()
+    return json.loads(data)["value"][0]["contentUrl"]
+  except:
+    conn.close()
+    raise 
 
 def allowed_file(filename):
     return '.' in filename and \
