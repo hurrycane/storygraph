@@ -4,6 +4,7 @@ const app = module.exports = express();
 
 const cmd = require('./cmd');
 const parser = require('./parser');
+const store = require('./store');
 const testData = require('./test');
 
 // Setting up middleware
@@ -23,6 +24,13 @@ app.post('/__test', (req, res, next) => {
   const result = parser.parse(testData)
   res.status(200).json(result);
 });
+
+app.get('/__dbtest', (req, res, next) => {
+  store.indexSyntaxnetGraph(store.sample).then(() => {
+    res.status(200).json('meh');
+  });
+});
+
 
 console.log('Started...');
 app.listen(3033, '0.0.0.0');

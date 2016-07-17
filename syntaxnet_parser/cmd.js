@@ -3,7 +3,9 @@ const exec = require('child_process').exec;
 
 const ROOT = '/home/nitin/models/syntaxnet'
 
-process.chdir(ROOT);
+if (process.env.REALZ) {
+  process.chdir(ROOT);
+}
 
 function syntaxnetCmd(input) {
   return `echo '${input}' | ${'bazel-bin/syntaxnet/parser_eval'} \
