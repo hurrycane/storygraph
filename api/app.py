@@ -91,7 +91,7 @@ def bing_image_search(query):
 
   params = urllib.urlencode({
       # Request parameters
-      'q': query,
+      'q': query + ' cartoon',
       'count': '1',
       'offset': '0',
       'mkt': 'en-us',
