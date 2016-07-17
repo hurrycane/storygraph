@@ -27,11 +27,11 @@ def nlp():
     if text_in is not None:
         text_out = text_in
     else:
-        if 'audio_wav_file' not in request.files:
+        if 'data' not in request.files:
             abort(400)
 
-        audio_in = request.files['audio_wav_file']
-        if audio_in and allowed_file(audio_in.filename):
+        audio_in = request.files['data']
+        if audio_in:
             audio_filename = secure_filename(audio_in.filename)
             audio_in_path = os.path.join(app.config['UPLOAD_FOLDER'],
                                          audio_filename)
