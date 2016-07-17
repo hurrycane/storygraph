@@ -187,7 +187,7 @@ class Graph(object):
         to_compact = [
             node_id
             for node_id, node in self.nodes.items()
-            if condition(node)
+            if condition(node) and node_id != self.root.id
         ]
 
         for node_id in to_compact:
