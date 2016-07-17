@@ -216,6 +216,8 @@ class Graph(object):
 
         for node_id in remove_ids:
             head_id_for_removal_node = self.nodes[node_id].head_id
+            if head_id_for_removal_node not in self.nodes:
+                continue
             head_node = self.nodes[head_id_for_removal_node]
             head_node.inbound.remove(node_id)
 
