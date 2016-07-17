@@ -1,8 +1,12 @@
+function keep(l) {
+  return l && l.cpostag !== '.';
+}
+
 function parse(input)  {
   const lines = input.replace(/[\t +]/g, ' ').split('\n');
   const output = [] ;
 
-  lines.filter(l => l).forEach(line => {
+  lines.filter(keep).forEach(line => {
     const splits = line.split(' ');
 
     const id = splits[0];
