@@ -3,8 +3,11 @@ const flatten = require('lodash.flatten');
 const neo4j = require('node-neo4j');
 const rp = require('request-promise');
 const keyBy = require('lodash.keyby');
+const redis = require('redis');
 
+const rClient = redis.createClient('pub-redis-17288.us-east-1-2.5.ec2.garantiadata.com:17288');
 const db = new neo4j('http://neo4j:1234@localhost:7474');
+
 db.cypherQueryAsync = Promise.promisify(db.cypherQuery, db);
 
 const sample = require('./parsed.json');
@@ -54,9 +57,6 @@ function createNode(node) {
   });
 }
 
-function findNode() {
-}
-
 function createRelations(node, dbNodes) {
   const nId = dbNodes[node.id].sid;
   const mId = dbNodes[node.head].sid;
@@ -80,5 +80,10 @@ module.exports = {
     yield Promise.all(nodes.map(node => {
       return createRelations(node, dbNodes);
     })); 
-	}),
+
+    // prune the node 
+    yield db.removeNodeByRel('ADP'); 
+    yield db.removeNodeByRel('DET'); 
+    yield db.removeNodeByRel('DET'); 
+  }),
 };
