@@ -16,6 +16,21 @@ story_to_text = WatsonStoryToText(
     username=app.config['WATSON_USERNAME'],
     password=app.config['WATSON_PASSWORD'])
 
+def _syntax_net(txts):
+    all_reqs = []
+    for txt in txts:
+        all_reqs.append(
+            requests.post(
+                'http://localhost:3033/syntax', 
+                headers={'content-type': 'application/json',}, 
+                data=json.dumps({
+                    'input': txt
+                })
+            )
+        )
+
+    return [req.json() for req in all_reqs]
+
 @app.route('/')
 def index():
     return jsonify('Winter is Coming.')
