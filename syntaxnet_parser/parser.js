@@ -22,7 +22,9 @@ function parse(input)  {
 
     output.push({
       id, form, lemma, cpostag, postag,
-      feats, head, deprel, phead, pdeprel
+      feats, head, deprel, phead, pdeprel,
+      src: id,
+      dst: head,
     });
   });
 
