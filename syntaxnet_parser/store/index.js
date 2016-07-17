@@ -46,7 +46,7 @@ function bootstrap() {
 function createNode(node) {
 	return new Promise((resolve, reject) => {
     db.cypherQuery(
-      `MERGE (n:${node.cpostag} {word: "${node.form}", pos: "${node.cpostag}"}) RETURN n;`
+      `MERGE (n:${node.cpostag} {word: "${node.form}"}) RETURN n;`
     , (err, res) => {
       if (err) return reject(err);
       const dbNode = res.data[0];
@@ -63,8 +63,15 @@ function createRelations(node, dbNodes) {
 
   db.cypherQuery(`
     MATCH n, m WHERE n=ID(${nId}) AND m=ID(${mId})
-    CREATE n -[:${node.deprel}]->m
+    CREATE n -[:${node.cpostag}]->m
   `);
+
+  if (node.cpostag === 'VERB') {
+    db.cypherQuery(`
+      MATCH n, m WHERE n=ID(${nId}) AND m=ID(${mId})
+      CREATE n -[:${node.word.toUpperCase()}]->m
+    `);
+  }
 }
 
 module.exports = {
@@ -76,14 +83,12 @@ module.exports = {
     // create all the nodes, indexed by POS
     const dbNodes = keyBy(yield Promise.all(nodes.map(createNode)), 'id');
 
-    // create all the edges
-    yield Promise.all(nodes.map(node => {
-      return createRelations(node, dbNodes);
-    })); 
+    // create all the edges for all verbs
+    yield Promise.all(nodes.map(node => createRelations(node, dbNodes)));
 
-    // prune the node 
-    yield db.removeNodeByRel('ADP'); 
-    yield db.removeNodeByRel('DET'); 
-    yield db.removeNodeByRel('DET'); 
+    // prune the node
+    yield db.removeNodeByLabel('ADP');
+    yield db.removeNodeByLabel('DET');
+    yield db.removeNodeByLabel('DET');
   }),
 };
