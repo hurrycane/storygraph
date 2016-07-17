@@ -6,6 +6,7 @@ from werkzeug.utils import secure_filename
 import httplib, urllib, base64
 
 from models import WatsonStoryToText
+from models import syntax_net_to_graph
 
 ALLOWED_EXTENSIONS = set(['wav'])
 
@@ -62,6 +63,15 @@ def nlp():
 @app.route('/graph', methods=['GET'])
 def graph():
     return jsonify(nodes=['test_node'])
+
+@app.route('/syntaxnet', methods=['GET'])
+def syntaxnet():
+    text_in = request.args.get('input')
+    all_nodes = _syntax_net([text_in])
+    assert len(all_nodes) == 1, '1 ONE'
+    summary = syntax_net_to_graph(nodes[0])
+
+    return jsonify(summary=summary, nodes=nodes[0])
 
 # template = "https://www.google.com/search?hl=en&authuser=0&site=imghp&tbm=isch&source=hp&q={0}"
 # template = "https://www.google.com/complete/search?client=img&hl=en&gs_rn=64&gs_ri=img&ds=i&pq={0}&cp=3&gs_id=719&q={0}&xhr=t"
