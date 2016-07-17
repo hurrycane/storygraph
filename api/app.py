@@ -64,7 +64,7 @@ def nlp():
 def graph():
     return jsonify(nodes=['test_node'])
 
-@app.route('/syntaxnet', methods=['GET'])
+@app.route('/syntaxnet', methods=['POST'])
 def syntaxnet():
     text_in = request.args.get('input')
     all_nodes = _syntax_net([text_in])
