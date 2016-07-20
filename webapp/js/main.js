@@ -218,3 +218,7 @@ function initializeClock(id, endtime) {
     }
   }, 200);
 }
+
+$(function(){
+  $("footer").load("footer.html"); 
+});
