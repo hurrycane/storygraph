@@ -118,7 +118,7 @@ DEALINGS IN THE SOFTWARE.
     fd.append('data', blob);
 
     var ajax = new XMLHttpRequest();
-    ajax.open("POST", "https://storygraph.me/nlp", true);
+    ajax.open("POST", "https://api.storygraph.me/nlp", true);
     ajax.send(fd);
     ajax.onload = function() {
       if (this.status >= 200 && this.status < 300) {
@@ -149,7 +149,7 @@ DEALINGS IN THE SOFTWARE.
 
           var access = new XMLHttpRequest();
 
-          access.open("POST", "http://130.211.127.78:5000/syntaxnet", true);
+          access.open("POST", "https://api.storygraph.me/syntaxnet", true);
           access.setRequestHeader("content-type", "application/json");
           access.send(JSON.stringify({
             input: j.text.results[i].alternatives[0].transcript,
@@ -166,7 +166,7 @@ DEALINGS IN THE SOFTWARE.
               var description = summary.join(" ")
 
                   var bingAjax = new XMLHttpRequest();
-              bingAjax.open("GET", "http://130.211.127.78:5000/image?q=" + description, true);
+              bingAjax.open("GET", "https://api.storygraph.me/image?q=" + description, true);
               bingAjax.send();
               bingAjax.onload = function() {
                   if (this.status >= 200 && this.status < 300) {
