@@ -118,7 +118,7 @@ DEALINGS IN THE SOFTWARE.
     fd.append('data', blob);
 
     var ajax = new XMLHttpRequest();
-    ajax.open("POST", "http://130.211.127.78:5000/nlp", true);
+    ajax.open("POST", "https://storygraph.me/nlp", true);
     ajax.send(fd);
     ajax.onload = function() {
       if (this.status >= 200 && this.status < 300) {
@@ -163,16 +163,16 @@ DEALINGS IN THE SOFTWARE.
               viz(nodes);
               console.log("response", summary);
 
-							var description = summary.join(" ")
+              var description = summary.join(" ")
 
-							var bingAjax = new XMLHttpRequest();
-							bingAjax.open("GET", "http://130.211.127.78:5000/image?q=" + description, true);
-							bingAjax.send();
-							bingAjax.onload = function() {
-								if (this.status >= 200 && this.status < 300) {
-									$('#right').append("<img class='row' style='max-width:300px; max-height:300px; vertical-align: middle;' id='image" + i + "' src='" + this.response + "'></img>");
-								}
-							}
+                  var bingAjax = new XMLHttpRequest();
+              bingAjax.open("GET", "http://130.211.127.78:5000/image?q=" + description, true);
+              bingAjax.send();
+              bingAjax.onload = function() {
+                  if (this.status >= 200 && this.status < 300) {
+                      $('#right').append("<img class='row' style='max-width:300px; max-height:300px; vertical-align: middle;' id='image" + i + "' src='" + this.response + "'></img>");
+                  }
+              }
             } else {
               console.log(this.response);
             }
