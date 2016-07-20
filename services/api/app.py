@@ -28,7 +28,7 @@ def _syntax_net(objs):
         print('HERE: ', obj, file=sys.stderr)
         all_reqs.append(
             requests.post(
-                'http://localhost:3033/syntaxnet',
+                'http://130.211.127.78:3033/syntaxnet',
                 headers={'content-type': 'application/json'},
                 data=json.dumps(obj),
             )
