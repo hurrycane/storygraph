@@ -71,7 +71,7 @@ def nlp():
 def graph():
     return jsonify(nodes=['test_node'])
 
-@app.route('/syntaxnet', methods=['POST'])
+@app.route('/syntaxnet', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
 def syntaxnet():
     obj = json.loads(request.data)
