@@ -11,6 +11,8 @@ import httplib, urllib, base64
 from models import WatsonStoryToText
 from models.syntax_net_to_graph import Graph
 
+from utils import crossdomain
+
 ALLOWED_EXTENSIONS = set(['wav'])
 
 app = Flask(__name__)
@@ -35,12 +37,14 @@ def _syntax_net(objs):
     return [req.json() for req in all_reqs]
 
 @app.route('/')
+@crossdomain(origin='*')
 def index():
     return jsonify('Winter is Coming.')
 
 # can be POST /nlp - which is audio input
 # or GET /nlp?text=i+have+a+dog - which is text input
 @app.route('/nlp', methods=['GET', 'POST'])
+@crossdomain(origin='*')
 def nlp():
     text_in = request.args.get('text')
 
@@ -63,10 +67,12 @@ def nlp():
     return jsonify(text=text_out)
 
 @app.route('/graph', methods=['GET'])
+@crossdomain(origin='*')
 def graph():
     return jsonify(nodes=['test_node'])
 
 @app.route('/syntaxnet', methods=['POST'])
+@crossdomain(origin='*')
 def syntaxnet():
     obj = json.loads(request.data)
     all_nodes = _syntax_net([obj])
@@ -78,6 +84,7 @@ def syntaxnet():
 # template = "https://www.google.com/search?hl=en&authuser=0&site=imghp&tbm=isch&source=hp&q={0}"
 # template = "https://www.google.com/complete/search?client=img&hl=en&gs_rn=64&gs_ri=img&ds=i&pq={0}&cp=3&gs_id=719&q={0}&xhr=t"
 @app.route('/image', methods=['GET'])
+@crossdomain(origin='*')
 def image():
   words = request.args['q']
   # Returns the image URL, not the image itself.
