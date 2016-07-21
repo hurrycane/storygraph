@@ -1,6 +1,4 @@
 class Node(object):
-
-
     def __init__(self, id, head_id=None, form=None, cpostag=None, deprel=None):
         if id == u'0':
             raise ValueError('ID cannot be 0')
@@ -13,12 +11,12 @@ class Node(object):
 
         # poor man's lazy init
         self.done = True
-        if (form is None or cpostag is None or deprel is None or head_id is None):
+        if (form is None or cpostag is None or deprel is None or
+                head_id is None):
             self.done = False
 
         self.inbound = []
         self.outbound = []
-
 
     def lazy_init(self, head_id, form, cpostag, deprel):
         if head_id is None or form is None or cpostag is None or deprel is None:
@@ -31,37 +29,31 @@ class Node(object):
 
         self.done = True
 
-
     # TODO(bogdan): Make this a property :-)
     def is_done(self):
         return self.done
 
-
     def add_inbound_edge(self, from_id):
         self.inbound.append(from_id)
-
 
     def add_outbound_edge(self, to_id):
         self.outbound.append(to_id)
 
-
     def _label(self):
-        return str(self.id) + "-" + str(self.form) + "-" + str(self.pos) + "-" + str(self.rel)
-
+        return str(self.id) + "-" + str(self.form) + "-" + str(
+            self.pos) + "-" + str(self.rel)
 
     def __str__(self):
         return self._label()
-
 
     def __repr__(self):
         return self._label()
 
 
 class Graph(object):
-
     def __init__(self, raw_graph):
         self.root = None
-        self.raw_nodes = dict([(node['id'], node) for node in raw_graph ])
+        self.raw_nodes = dict([(node['id'], node) for node in raw_graph])
 
         self.nodes = {}
 
@@ -79,16 +71,23 @@ class Graph(object):
                     if head_id is '0':
                         head_id = -1
 
-                    node.lazy_init(head_id=head_id, form=raw_node["form"], cpostag=raw_node["cpostag"],
-                                   deprel=raw_node["deprel"])
+                    node.lazy_init(
+                        head_id=head_id,
+                        form=raw_node["form"],
+                        cpostag=raw_node["cpostag"],
+                        deprel=raw_node["deprel"])
             else:
                 head_id = node_head_id
                 if head_id is '0':
                     head_id = -1
 
                 # Create the node
-                node = Node(node_id, head_id=head_id, form=raw_node["form"], cpostag=raw_node["cpostag"],
-                            deprel=raw_node["deprel"])
+                node = Node(
+                    node_id,
+                    head_id=head_id,
+                    form=raw_node["form"],
+                    cpostag=raw_node["cpostag"],
+                    deprel=raw_node["deprel"])
                 self.nodes[node_id] = node
 
             # each raw_node has an ID and a head -- add edge from ID to head, add edge from head to ID
@@ -117,10 +116,10 @@ class Graph(object):
         # Tranform
         self.transform()
 
-
     """
     Multiple rules need to be applied for this graph.
     """
+
     def transform(self):
         nb_of_nodes = len(self.nodes)
 
@@ -142,12 +141,9 @@ class Graph(object):
 
             nb_of_nodes = len(self.nodes)
 
-
     def _find_and_adnotate(self, from_where, find_what):
         from_where = [
-            node_id
-            for node_id, node in self.nodes.items()
-            if from_where(node)
+            node_id for node_id, node in self.nodes.items() if from_where(node)
         ]
 
         for node_id in from_where:
@@ -163,7 +159,6 @@ class Graph(object):
 
                 # only one noun at a time.
                 break
-
 
     def _dfs(self, stat_node_id, find_what):
         stack = [stat_node_id]
@@ -188,11 +183,9 @@ class Graph(object):
 
         return found
 
-
     def _compact(self, condition):
         to_compact = [
-            node_id
-            for node_id, node in self.nodes.items()
+            node_id for node_id, node in self.nodes.items()
             if condition(node) and node_id != self.root.id
         ]
 
@@ -206,18 +199,17 @@ class Graph(object):
             head_node.inbound.remove(node_to_compact.id)
 
             for inbound_of_compact in node_to_compact.inbound:
-               head_node.inbound.append(inbound_of_compact)
-               self.nodes[inbound_of_compact].outbound.remove(node_to_compact.id)
-               self.nodes[inbound_of_compact].outbound.append(head_node.id)
-               self.nodes[inbound_of_compact].head_id = head_node.id
+                head_node.inbound.append(inbound_of_compact)
+                self.nodes[inbound_of_compact].outbound.remove(
+                    node_to_compact.id)
+                self.nodes[inbound_of_compact].outbound.append(head_node.id)
+                self.nodes[inbound_of_compact].head_id = head_node.id
 
             del self.nodes[node_to_compact.id]
 
-
     def _remove(self, condition):
         remove_ids = [
-            node_id
-            for node_id, node in self.nodes.items()
+            node_id for node_id, node in self.nodes.items()
             if condition(node) and node_id != self.root.id
         ]
 
@@ -230,7 +222,6 @@ class Graph(object):
 
             del self.nodes[node_id]
 
-
     def _neighbours(self, current_node_id):
         neighbours = []
 
@@ -241,7 +232,6 @@ class Graph(object):
             neighbours.append(node_id)
 
         return neighbours
-
 
     def find_strings(self):
         if self.root is None:
@@ -282,9 +272,8 @@ class Graph(object):
             for node_id in neighbours:
                 node = self.nodes[node_id]
 
-                if (node.rel == "nsubj" or
-                    node.pos == "ADV"
-                    or (node.pos == "VERB" and node.rel != "partmod")):
+                if (node.rel == "nsubj" or node.pos == "ADV" or
+                    (node.pos == "VERB" and node.rel != "partmod")):
                     candidates.append(node_id)
 
             for node_id in neighbours:
@@ -306,7 +295,6 @@ class Graph(object):
             words.add(self.root.form)
             return words
 
-
     def show(self):
         edges = []
         for node_id, node in self.nodes.items():
@@ -315,11 +303,6 @@ class Graph(object):
 
             head_node = self.nodes[node.head_id]
 
-            edges.append(
-                (
-                    node._label(),
-                    head_node._label()
-                )
-            )
+            edges.append((node._label(), head_node._label()))
 
         draw_graph(edges)
