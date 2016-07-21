@@ -287,6 +287,18 @@ class Graph(object):
                     or (node.pos == "VERB" and node.rel != "partmod")):
                     candidates.append(node_id)
 
+            for node_id in neighbours:
+                out_node = self.nodes[node_id]
+                if out_node.pos != "NOUN":
+                    continue
+
+                double_neighbours = self._neighbours(node_id)
+
+                for neighbour_id in double_neighbours:
+                    node = self.nodes[neighbour_id]
+                    if node.pos == "ADJ":
+                        candidates.append(neighbour_id)
+
             words = set()
             for node_id in candidates:
                 words.add(self.nodes[node_id].form)
