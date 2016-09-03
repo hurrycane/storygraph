@@ -7,8 +7,8 @@ a number of images for each phrase you speak.
 ## Technical details
 
 We use Watson Speech API for speech to text transformation. After that
-we feed each phrase into Google's Syntax Net to adnotate it with POS. Then we
-apply some a model to summarize the phrase to a number of search terms that we
+we feed each phrase into Google's *Syntax Net* to adnotate it with POS. Then we
+apply a model to summarize the phrase to a number of search terms that we
 use to search images using bing image search.
 
 ## Team Members
